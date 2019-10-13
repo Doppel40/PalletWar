@@ -33,57 +33,79 @@ public class TestPalletWar {
 		int fightsNumber =0;
 		boolean chaos = false;
 		int petitions = 0;
+		String nextUrlresult = null;
+		String fightsString = null;
 		
-		ArrayList<String> results = new ArrayList<String>();		
-		ArrayList<Fight> Fights = new ArrayList<Fight>();
-		ArrayList<String> realOrder = new ArrayList<String>();
+		ArrayList<String> results = new ArrayList<String>();				
+		ArrayList<String> realOrder = new ArrayList<String>();			
 		ArrayList<String> pokedex = new ArrayList<String>();
+		ArrayList<Fight> Fights = new ArrayList<Fight>();		
 		
 		JSONArray pokedexArray = new JSONArray();
+		JSONArray realOrderArray = new JSONArray();		
 		JSONArray FightsArray = new JSONArray();
 		JSONArray resultsArray = new JSONArray();		
 		JSONObject jsonFight = new JSONObject();
-		results.add("charmander");		
+		
+		// resultado 1 Pelea CH>BU
+	/*	results.add("charmander");		
+		results.add("bulbasaur");
+		results.add("squirtle");		
+		results.add("caterpie");
+		results.add("pidgey");	*/			
+		
+		// resultado 4 Pelea BU<Everyone -- ["Charmander", "Squirtle", "Caterpie", "Pidgey", "Bulbasaur"]		
+		/*results.add("charmander");		
 		results.add("squirtle");
 		results.add("caterpie");
 		results.add("pidgey");		
-		results.add("bulbasaur");			
+		results.add("bulbasaur");	*/
 		
-		results.forEach(pokemon -> resultsArray.add(pokemon));
-		/*				
+		// resultado 7 Pelea -- ["Squirtle", "Pidgey", "Charmander", "Caterpie", "Bulbasaur"]		
+		results.add("squirtle");				
+		results.add("charmander");
+		results.add("pidgey");		
+		results.add("caterpie");		
+		results.add("bulbasaur");	
+										
 		PokedexMgr newPokedex = new PokedexMgr(results, pokedex, null);
 		newPokedex.FillPokedex();		
 		results = newPokedex.getResults();		
 		realOrder = newPokedex.getRealOrder();		
+		nextUrlresult = newPokedex.getNextUrl();
+		petitions = newPokedex.getPetitions();
+		pokedex = newPokedex.getPokedex();
 		
 		PalletWar newTournament = new PalletWar (results,realOrder);
 		newTournament.CalculateFights();
-		*/
-		//Fights = newTournament.GetFightsList();
-		/*	
+		
+		fightsString= newTournament.GetFights();
+		fightsNumber = newTournament.GetFightsNumber();
+		chaos = newTournament.isThereChaos();			
+		
+		
+		pokedex.forEach(pokemon -> pokedexArray.add(pokemon));
+		
+		Fights = newTournament.GetFightsList();
+			
 		for ( Fight actualFight : Fights ) {
 			jsonFight.put("winner", actualFight.getWinner());
 			jsonFight.put("loser", actualFight.getLoser());		
 			FightsArray.add(jsonFight);
 			jsonFight = new JSONObject();
-		}		*/
-		
-		/*	fightsNumber = newTournament.GetFightsNumber();
-		
-		pokedex = newPokedex.getPokedex();
-		
-		pokedex.forEach(pokemon -> pokedexArray.add(pokemon));
-		
-		chaos = newTournament.isThereChaos();	
-		*/
-		JSONObject responseBody = new JSONObject();
-		
-		responseBody.put("resultsArray", resultsArray);   
-        //responseBody.put("message", "testing");
-        //responseBody.put("chaos", chaos);
-        //responseBody.put("fightsNumber", fightsNumber);
-        //responseBody.put("pokedexArray", pokedexArray);*/
-        //responseBody.put("FightsArray", FightsArray);        
+		}		
+		realOrder.forEach(index -> realOrderArray.add(index));
+		results.forEach(pokemon -> resultsArray.add(pokemon));		
+					   
+		JSONObject responseBody = new JSONObject();		
+		responseBody.put("resultsArray", resultsArray);          
+        responseBody.put("chaos", chaos);
+        responseBody.put("fightsNumber", fightsNumber);        
+        responseBody.put("FightsArray", FightsArray);  
+        
+        responseBody.put("realOrderArray", realOrderArray);
+        responseBody.put("pokedexArray", pokedexArray);        
+                
 		
         System.out.println("------------------------------------------------");
         System.out.println(responseBody.toString());
@@ -96,10 +118,11 @@ public class TestPalletWar {
 		
 		System.out.println("------------------------------------------------");
 	//	Fights = newTournament.GetFightsList();		
-		Fights.forEach(Fight -> {
+	/*	Fights.forEach(Fight -> {
 			System.out.println("Winner "+ Fight.getWinner()+" VS  Loser "+Fight.getLoser());
 			
 		});
+		*/
 	}
 
 }

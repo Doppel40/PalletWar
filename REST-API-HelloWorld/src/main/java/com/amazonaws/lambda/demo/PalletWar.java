@@ -5,15 +5,14 @@ import java.util.ArrayList;
 public class PalletWar {
 	
 	private ArrayList<String> results = new ArrayList<String>(); 
-	private ArrayList<String> realOrder = new ArrayList<String>(); 
-	private ArrayList<String> midFight = new ArrayList<String>(); 	
+	private ArrayList<String> realOrder = new ArrayList<String>(); 	 
 	private ArrayList<String> Fights = new ArrayList<String>();
 	private ArrayList<Fight> FightsClass = new ArrayList<Fight>();	
 	private boolean isThereChaos;
 	
 	public PalletWar ( ArrayList<String> resultInput, ArrayList<String> realOrderInput){
 		results = resultInput;
-		realOrder = realOrderInput;
+		realOrderInput.forEach(index -> realOrder.add(index));				
 	}
 	
 	public void CalculateFights() {		
@@ -25,13 +24,12 @@ public class PalletWar {
 		//String pokemonToEvaluate = null;
 		String loser="";
 		String winner="";
-		String sbFight="";		
-		midFight = realOrder;
+		String sbFight="";				
 		
 		for (String result : results)
 	    {
 			resultPosition = results.indexOf(result);
-			OriginalPosition = midFight.indexOf(result);
+			OriginalPosition = realOrder.indexOf(result);
 			
 			// Evalua el nombre en caso de que el Api lo devuelva con mayusculas
 			/*if (OriginalPosition<0) {
@@ -51,14 +49,14 @@ public class PalletWar {
 				for (int i = 1; i <= fightsWon; i++) {
 					loserIndex = OriginalPosition - i ;
 					winnerIndex = OriginalPosition - i + 1;
-					sbFight = "Winner "+midFight.get(winnerIndex)+" VS Loser "+midFight.get(loserIndex);					
+					sbFight = "Winner "+realOrder.get(winnerIndex)+" VS Loser "+realOrder.get(loserIndex);					
 					Fights.add(sbFight);			
-					FightsClass.add(new Fight(midFight.get(winnerIndex),midFight.get(loserIndex)));
-					loser = midFight.get(loserIndex);
-					winner = midFight.get(winnerIndex);
+					FightsClass.add(new Fight(realOrder.get(winnerIndex),realOrder.get(loserIndex)));
+					loser = realOrder.get(loserIndex);
+					winner = realOrder.get(winnerIndex);
 										
-					midFight.set(loserIndex, winner);
-					midFight.set(winnerIndex, loser);
+					realOrder.set(loserIndex, winner);
+					realOrder.set(winnerIndex, loser);
 				}				
 			}
 	    }				
@@ -90,14 +88,7 @@ public class PalletWar {
 	
 	public ArrayList<Fight> GetFightsList() {
 		return FightsClass;
-	}
-	
-	public ArrayList<String> getMidFight() {
-		return midFight;
-	}
-	
-	
-	
+	}	
 }
 
 
