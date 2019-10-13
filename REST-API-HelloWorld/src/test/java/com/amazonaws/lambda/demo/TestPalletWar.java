@@ -28,22 +28,7 @@ public class TestPalletWar {
 		for (String dex : pokedex) {
 			System.out.println(dex);
 		}		
-		*/
-		
-		/* 
-		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion("us-east-1").build();
-		//Region region = Region.getRegion(Regions.US_EAST_1);
-		//System.setProperty("aws.region", "us-east-1");
-		//AmazonEC2 ec2 = AmazonEC2ClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
-		//AmazonEC2 ec2 = AmazonEC2ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion("us-east-1").build();
-		DynamoDB dynamo = new DynamoDB(client);
-        Table table = dynamo.getTable("Person");
-        Item item = new Item()
-        	    .withPrimaryKey("id", 1)
-        	    .withString("results", "holllly SHIIIIIIIEEET");
-        PutItemOutcome outcome = table.putItem(item);
-		
-		*/	
+		*/		
 		
 		int fightsNumber =0;
 		boolean chaos = false;
@@ -56,12 +41,15 @@ public class TestPalletWar {
 		
 		JSONArray pokedexArray = new JSONArray();
 		JSONArray FightsArray = new JSONArray();
+		JSONArray resultsArray = new JSONArray();		
 		JSONObject jsonFight = new JSONObject();
 		results.add("charmander");		
 		results.add("squirtle");
 		results.add("caterpie");
 		results.add("pidgey");		
 		results.add("bulbasaur");			
+		
+		results.forEach(pokemon -> resultsArray.add(pokemon));
 		/*				
 		PokedexMgr newPokedex = new PokedexMgr(results, pokedex, null);
 		newPokedex.FillPokedex();		
@@ -72,13 +60,13 @@ public class TestPalletWar {
 		newTournament.CalculateFights();
 		*/
 		//Fights = newTournament.GetFightsList();
-			
+		/*	
 		for ( Fight actualFight : Fights ) {
 			jsonFight.put("winner", actualFight.getWinner());
 			jsonFight.put("loser", actualFight.getLoser());		
 			FightsArray.add(jsonFight);
 			jsonFight = new JSONObject();
-		}		
+		}		*/
 		
 		/*	fightsNumber = newTournament.GetFightsNumber();
 		
@@ -88,12 +76,14 @@ public class TestPalletWar {
 		
 		chaos = newTournament.isThereChaos();	
 		*/
-		JSONObject responseBody = new JSONObject();/*
-        responseBody.put("message", "testing");
-        responseBody.put("chaos", chaos);
-        responseBody.put("fightsNumber", fightsNumber);
-        responseBody.put("pokedexArray", pokedexArray);*/
-        responseBody.put("FightsArray", FightsArray);        
+		JSONObject responseBody = new JSONObject();
+		
+		responseBody.put("resultsArray", resultsArray);   
+        //responseBody.put("message", "testing");
+        //responseBody.put("chaos", chaos);
+        //responseBody.put("fightsNumber", fightsNumber);
+        //responseBody.put("pokedexArray", pokedexArray);*/
+        //responseBody.put("FightsArray", FightsArray);        
 		
         System.out.println("------------------------------------------------");
         System.out.println(responseBody.toString());
