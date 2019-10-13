@@ -29,30 +29,20 @@ public class LambdaFunctionHandler implements RequestStreamHandler
 		logger.log("Loading Java Lambda handler of ProxyWithStream");
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));		
-		JSONObject responseJson = new JSONObject();		
-		JSONObject fullPetition = null;			
-       
-		String proxy = null;
+		JSONObject responseJson = new JSONObject();					
+		JSONObject responseBody = new JSONObject();		
+		JSONObject fullPetition = new JSONObject();						
+		JSONArray resultsArray = new JSONArray();
+				
 		//String param1 = null;
 		//String param2 = null;
+		String proxy = null;		
 		String bodyJson = null;			
 		String responseCode = "200";
 		String messageOutput = "Initial Message: ¡Shit is about to get real! ";
 		
 		ArrayList<String> results = new ArrayList<String>();
-		ArrayList<String> pokedex = new ArrayList<String>();		
-		ArrayList<String> realOrder = new ArrayList<String>();
-		
-		int fightsNumber =0;
-		boolean chaos = false;
-		int petitions = 0;
-		
-		ArrayList<Fight> fightList = new JSONArray();
-		JSONObject jsonFight = new JSONObject();		
-		JSONArray pokedexArray = new JSONArray();
-		JSONArray FightsArray = new JSONArray();
-		JSONArray realOrderArray = new JSONArray();
-		JSONArray resultsArray = new JSONArray();		
+		ArrayList<String> initialpokedex = new ArrayList<String>();		
       
 		// Recepción de entrada
 		try {
@@ -91,60 +81,18 @@ public class LambdaFunctionHandler implements RequestStreamHandler
 			responseJson.put("statusCode", "400");
 			responseJson.put("exception", pex);
 		}				
-	       
+	    		
+		// Ejecución principal
 		if (proxy.toLowerCase().equals("palletwar")) {								
-			try {				
-				if (results.size()>0) {				
-					
-					// Obtener el orden real de los pokemon utilizando los resultados recibidos
-					PokedexMgr newPokedex = new PokedexMgr(results, pokedex, null);
-					newPokedex.FillPokedex();		
-					
-					// Obtener los resultados, orden real, número de peticiones y todos los pokemones (pokedex)
-					results = newPokedex.getResults();		
-					realOrder = newPokedex.getRealOrder();	
-					petitions = newPokedex.getPetitions();
-					pokedex = newPokedex.getPokedex();					
-					
-					// Ejecución de algoritmo para determinar el número de peleas
-					PalletWar newTournament = new PalletWar (results,realOrder);
-					newTournament.CalculateFights();
-										
-					// Obtener la lista de las peleas, número de peleas y si hay inconsistencia de peleas
-					fightList = newTournament.GetFightsList();								
-					fightsNumber = newTournament.GetFightsNumber();					
-					chaos = newTournament.isThereChaos();
-					
-					// Se arman los datos para generar la respuesta
-					for ( Fight actualFight : fightList ) {
-						jsonFight.put("winner", actualFight.getWinner());
-						jsonFight.put("loser", actualFight.getLoser());		
-						FightsArray.add(jsonFight);
-						jsonFight = new JSONObject();
-					}
-					
-					pokedex.forEach(index -> pokedexArray.add(index));
-					realOrder.forEach(index -> realOrderArray.add(index));											
-				}					
-				
-			} catch (UnirestException | ParseException e) {
-				e.printStackTrace();
-			}		
+			PokemonLeagueLauncher newLeague = new PokemonLeagueLauncher(results, initialpokedex, null);
+			responseBody = newLeague.startPalletWar();
 		} 
 		else if (proxy.toLowerCase().equals("DummyPlug")) {
 			messageOutput = "DummyPlug";
 		}
 		
-		// Armado de respuesta
-   
-		 JSONObject responseBody = new JSONObject();
+		// Completando respuesta		 
          responseBody.put("message", messageOutput);
-         responseBody.put("chaos", chaos);
-         responseBody.put("petitions", petitions);
-         responseBody.put("fightsNumber", fightsNumber);         
-         responseBody.put("FightsArray", FightsArray);    
-         responseBody.put("pokedexArray", pokedexArray);
-         responseBody.put("realOrder", realOrder);
          responseBody.put("resultsArray", resultsArray); 
          responseBody.put("Proxy",proxy.toLowerCase());
          
