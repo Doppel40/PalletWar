@@ -35,7 +35,7 @@ public class PokemonLeagueLauncher {
 		
 		int fightsNumber =0;		
 		int petitions = 0;		
-		boolean chaos = false;		
+		String chaos = "N";		
 		
 		try {				
 			if (results.size()>0) {				
@@ -57,6 +57,10 @@ public class PokemonLeagueLauncher {
 				fightList = newTournament.GetFightsList();								
 				fightsNumber = newTournament.GetFightsNumber();					
 				chaos = newTournament.isThereChaos();
+				
+				if (chaos==null) {
+					chaos = "N";
+				}
 				
 				// Se arman los datos para generar la respuesta
 				for ( Fight actualFight : fightList ) {

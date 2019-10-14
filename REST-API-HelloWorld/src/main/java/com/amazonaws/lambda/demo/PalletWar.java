@@ -8,7 +8,7 @@ public class PalletWar {
 	private ArrayList<String> realOrder = new ArrayList<String>(); 	 
 	private ArrayList<String> Fights = new ArrayList<String>();
 	private ArrayList<Fight> FightsClass = new ArrayList<Fight>();	
-	private boolean isThereChaos;
+	private String isThereChaos;
 	
 	public PalletWar ( ArrayList<String> resultInput, ArrayList<String> realOrderInput){
 		results = resultInput;
@@ -43,7 +43,7 @@ public class PalletWar {
 			fightsWon = OriginalPosition - resultPosition;						
 			
 			if (fightsWon > 2) {
-				isThereChaos = true;
+				isThereChaos = "Y";
 				break;
 			} else if (fightsWon > 0) {
 				for (int i = 1; i <= fightsWon; i++) {
@@ -67,7 +67,7 @@ public class PalletWar {
 		return Fights.size();
 	}
 	
-	public boolean isThereChaos()
+	public String isThereChaos()
 	{
 		return isThereChaos;		
 	}

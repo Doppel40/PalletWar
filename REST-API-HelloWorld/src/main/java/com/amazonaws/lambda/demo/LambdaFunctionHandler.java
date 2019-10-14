@@ -39,7 +39,7 @@ public class LambdaFunctionHandler implements RequestStreamHandler
 		String proxy = null;		
 		String bodyJson = null;			
 		String responseCode = "200";
-		String messageOutput = "Initial Message: ¡Shit is about to get real! ";
+		String messageOutput = "Initial Message: ¡Starting the process! ";
 		
 		ArrayList<String> results = new ArrayList<String>();
 		ArrayList<String> initialpokedex = new ArrayList<String>();		
@@ -95,10 +95,17 @@ public class LambdaFunctionHandler implements RequestStreamHandler
          responseBody.put("message", messageOutput);
          responseBody.put("resultsArray", resultsArray); 
          responseBody.put("Proxy",proxy.toLowerCase());
-         
+
          JSONObject headerJson = new JSONObject();
-         headerJson.put("x-custom-header", "Dont know what should i put here");
+         headerJson.put("x-custom-header", "Custom_header");
+         headerJson.put("Content-Type", "application/json");
          headerJson.put("Access-Control-Allow-Origin", "*");
+        /* headerJson.put("Access-Control-Max-Age", "3600");         
+         headerJson.put("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+         headerJson.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
+         headerJson.put("Access-Control-Allow-Credentials", "true");
+         
+         headerJson.put("Vary", "Origin"); */        
 
          responseJson.put("isBase64Encoded", false);
          responseJson.put("statusCode", responseCode);
