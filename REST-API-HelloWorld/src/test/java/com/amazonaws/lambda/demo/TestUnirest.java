@@ -40,6 +40,7 @@ public class TestUnirest {
 		String Pokemon;
 		String savedUrl;
 		String pokedexInfo = null;
+		
 		String table_name = "pokedex";
 		
 		DynamoDBHandler DynamoDB = new DynamoDBHandler("pokedex");

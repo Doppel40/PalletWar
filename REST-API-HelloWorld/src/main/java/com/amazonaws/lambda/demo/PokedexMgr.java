@@ -42,20 +42,40 @@ public class PokedexMgr {
 	
 	public void FillPokedex() throws UnirestException, ParseException{		
 		String Pokemon;
+		String pokedexInfo = null;
 		
 		JSONObject responseBody;
 		JSONObject responsePokemon;				
-		JSONArray resultsArray;						
+		JSONArray resultsArray;		
+		
+		
+		// Se crea objecto para DynamoDB con la tabla pokedex
+		DynamoDBHandler DynamoDB = new DynamoDBHandler("pokedex");
 		
 		do {
-			// Se obtiene el nombre y url de los primeros 100 pokemon
-			response = Unirest.get(nextUrl).asString();		
 			
-			// Conteo de peticiones
-			petitions++;
+			// Se consultan datos para la primera petición
+			pokedexInfo = DynamoDB.GetData("ID", nextUrl);
+			
+			if (pokedexInfo==null) {
+				System.out.println("pokedexInfo empty");
+				// Se obtienen el nombre y url de los 100 pokemon de acuerdo a la url
+				response = Unirest.get(nextUrl).asString();
+				pokedexInfo = response.getBody();
+				System.out.println("new pokedexInfo to store as ID "+nextUrl);
+				// Se almacena el resultado
+				DynamoDB.SaveData("ID", nextUrl, "JSON", pokedexInfo);
+				// Conteo de peticiones
+				petitions++;
+				
+			} 	
+			else {
+				System.out.println("Loaded Pokedex info "+pokedexInfo);
+				
+			}	
 			
 			// Se parsea el resultado para obtener el siguiente llamado y el resultado de este llamado
-			responseBody = (JSONObject)parser.parse(response.getBody());			
+			responseBody = (JSONObject)parser.parse(pokedexInfo);			
 			nextUrl = (String) responseBody.get("next");
 			resultsArray = (JSONArray) responseBody.get("results");
 			System.out.println("nextUrl "+nextUrl);
