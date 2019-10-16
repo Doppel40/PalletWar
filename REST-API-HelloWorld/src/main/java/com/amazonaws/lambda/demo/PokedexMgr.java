@@ -1,10 +1,16 @@
 package com.amazonaws.lambda.demo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -39,7 +45,7 @@ public class PokedexMgr {
 		
 		JSONObject responseBody;
 		JSONObject responsePokemon;				
-		JSONArray resultsArray;								
+		JSONArray resultsArray;						
 		
 		do {
 			// Se obtiene el nombre y url de los primeros 100 pokemon

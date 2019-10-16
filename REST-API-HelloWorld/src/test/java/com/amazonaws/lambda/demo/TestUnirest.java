@@ -1,12 +1,18 @@
 package com.amazonaws.lambda.demo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.cognitoidentity.model.ResourceNotFoundException;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -32,14 +38,32 @@ public class TestUnirest {
 		JSONObject responsePokemon;				
 		JSONArray resultsArray;	
 		String Pokemon;
+		String savedUrl;
+		String pokedexInfo = null;
+		String table_name = "pokedex";
+		
+		DynamoDBHandler DynamoDB = new DynamoDBHandler("pokedex");
 		
 		do {
-		response = Unirest.get(nextUrl).asString();	
+			
+		pokedexInfo = DynamoDB.GetData("ID", nextUrl);
 		
-		responseBody = (JSONObject)parser.parse(response.getBody());			
+		if (pokedexInfo==null) {
+			System.out.println("pokedexInfo empty");
+			response = Unirest.get(nextUrl).asString();
+			pokedexInfo = response.getBody();
+			System.out.println("new pokedexInfo to store as ID "+nextUrl);
+			DynamoDB.SaveData("ID", nextUrl, "JSON", pokedexInfo);			
+			
+		} 	
+		else {
+			System.out.println("Loaded Pokedex info "+pokedexInfo);
+			
+		}
+		responseBody = (JSONObject)parser.parse(pokedexInfo);        
+							
 		nextUrl = (String) responseBody.get("next");
-		resultsArray = (JSONArray) responseBody.get("results");
-		System.out.println("nextUrl "+nextUrl);
+		resultsArray = (JSONArray) responseBody.get("results");		
 		
 		// Se recorren los pokemons para determinar si aplican para validar el resultado
 		for (int i = 0; i < resultsArray.size(); i++) {

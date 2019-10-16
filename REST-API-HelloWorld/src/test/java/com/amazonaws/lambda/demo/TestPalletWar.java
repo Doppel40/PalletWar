@@ -1,10 +1,13 @@
 package com.amazonaws.lambda.demo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.junit.Assert;
+import org.junit.Test;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -60,5 +63,25 @@ public class TestPalletWar {
 		});
 		*/
 	}
+	
+	@Test
+	public void Test7Fights() throws IOException {
+		ArrayList<String> results = new ArrayList<String>();
+		ArrayList<String> pokedex = new ArrayList<String>();		
+		JSONArray resultsArray = new JSONArray();		
+		// resultado 7 Pelea -- ["Squirtle", "Pidgey", "Charmander", "Caterpie", "Bulbasaur"]		
+		results.add("squirtle");				
+		results.add("charmander");
+		results.add("pidgey");		
+		results.add("caterpie");		
+		results.add("bulbasaur");	
+				
+		results.forEach(pokemon -> resultsArray.add(pokemon));				
+		JSONObject responseBody = new JSONObject();		
+		PokemonLeagueLauncher newLeague = new PokemonLeagueLauncher(results, pokedex, null);
+		responseBody = newLeague.startPalletWar();
+		Assert.assertEquals("N", (String) responseBody.get("chaos"));
+		Assert.assertEquals(7, (int) responseBody.get("fightsNumber"));
+	}	
 
 }
